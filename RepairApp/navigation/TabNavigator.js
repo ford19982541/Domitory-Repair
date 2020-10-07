@@ -3,7 +3,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { TabBar, Tab, Layout, Text } from "@ui-kitten/components";
+import {
+  BottomNavigation,
+  BottomNavigationTab,
+  Layout,
+  Text,
+} from "@ui-kitten/components";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import Detail from "../screens/Detail";
@@ -19,26 +24,24 @@ const Stack = createStackNavigator();
 // }
 function HomeStack(props) {
   return (
-    <Stack.Navigator mode="card" headerMode="screen">
+    <Stack.Navigator mode="card" headerMode="none">
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{
-          title: "Home",
-        }}
       />
       <Stack.Screen
-      name="Detail"
-      component={Detail}
-      options={{
-        title: "Detail",
-      }}/>
+        name="Detail"
+        component={Detail}
+        options={{
+          title: "Detail",
+        }}
+      />
     </Stack.Navigator>
   );
 }
 function ProfileStack(props) {
   return (
-    <Stack.Navigator mode="card" headerMode="screen">
+    <Stack.Navigator mode="card" headerMode="none">
       <Stack.Screen
         name="Profile"
         component={Profile}
@@ -54,25 +57,31 @@ export default function LoginStack(props) {
   return (
     <SafeAreaProvider>
       <Stack.Navigator mode="card" headerMode="none">
-        <Stack.Screen name="Login" component={Login} options={{title: "Login"}}/>
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ title: "Login", headerTransparent: true }}
+        />
         <Stack.Screen name="App" component={TabNavigator} />
       </Stack.Navigator>
     </SafeAreaProvider>
   );
 }
-const TopTabBar = ({ navigation, state }) => (
-  <TabBar
-    selectedIndex={state.index}
-    onSelect={(index) => navigation.navigate(state.routeNames[index])}
-  >
-    <Tab title="Home" />
-    <Tab title="PROFILE" />
-  </TabBar>
+const BottomTabBar = ({ navigation, state }) => (
+  <React.Fragment>
+    <BottomNavigation
+      selectedIndex={state.index}
+      onSelect={(index) => navigation.navigate(state.routeNames[index])}
+    >
+      <BottomNavigationTab title="HomE" />
+      <BottomNavigationTab title="Profile" />
+    </BottomNavigation>
+  </React.Fragment>
 );
 
 function TabNavigator() {
   return (
-    <BottomTab.Navigator tabBar={(props) => <TopTabBar {...props} />}>
+    <BottomTab.Navigator tabBar={(props) => <BottomTabBar {...props} />}>
       <BottomTab.Screen name="Home" component={HomeStack} />
       <BottomTab.Screen name="Profile" component={ProfileStack} />
     </BottomTab.Navigator>
