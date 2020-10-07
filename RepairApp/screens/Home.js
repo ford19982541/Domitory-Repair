@@ -1,20 +1,27 @@
-import React from 'react';
-import { SafeAreaView } from 'react-native';
-import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
+import React from "react";
+import { SafeAreaView } from "react-native";
+import {
+  Button,
+  Divider,
+  Layout,
+  TopNavigation,
+  Text,
+} from "@ui-kitten/components";
 
-export const Home = ({ navigation }) => {
-
-  const navigateDetails = () => {
-    navigation.navigate('Details');
-  };
-
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TopNavigation title='MyApp' alignment='center'/>
-      <Divider/>
-      <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Button onPress={navigateDetails}>OPEN DETAILS</Button>
-      </Layout>
-    </SafeAreaView>
-  );
-};
+class Home extends React.Component {
+  render() {
+    const { navigation } = this.props;
+    const navigateDetails = () => {
+      navigation.navigate("Detail");
+    };
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <Layout  style={{ flex: 1 ,justifyContent: "center", alignItems: "center"}}>
+          <Text>Home</Text>
+          <Button onPress={navigateDetails}>OPEN DETAILS</Button>
+        </Layout>
+      </SafeAreaView>
+    );
+  }
+}
+export default Home;

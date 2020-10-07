@@ -1,12 +1,13 @@
 import React from 'react'
 import { ApplicationProvider, Layout, Button, Text } from '@ui-kitten/components';
 class Profile extends React.Component {
-    render(){
-        return(
-            <Layout>
-                <Text>PRofile</Text>
-            </Layout>
-        )
+    render() {
+      return (
+        <Layout>
+          <Text>Profile</Text>
+          {/* <Button>Detail</Button> */}
+        </Layout>
+      );
     }
-}
-export default Profile;
+  }
+  export default Profile;
