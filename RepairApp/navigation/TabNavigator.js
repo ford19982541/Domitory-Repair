@@ -8,6 +8,7 @@ import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import Detail from "../screens/Detail";
 import Login from "../screens/Login";
+import Repair from "../screens/Repair";
 const BottomTab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -32,6 +33,13 @@ function HomeStack(props) {
       component={Detail}
       options={{
         title: "Detail",
+      }}/>
+   
+      <Stack.Screen
+      name="Repair"
+      component={Repair}
+      options={{
+        title: "Repair",
       }}/>
     </Stack.Navigator>
   );
