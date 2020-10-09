@@ -6,6 +6,7 @@ class Profile extends React.Component {
         <Layout>
           <Text>Profile</Text>
           {/* <Button>Detail</Button> */}
+          {/* <Button>Edit</Button> */}
         </Layout>
       );
     }

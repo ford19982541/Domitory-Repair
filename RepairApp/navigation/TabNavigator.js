@@ -7,7 +7,9 @@ import { TabBar, Tab, Layout, Text } from "@ui-kitten/components";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import Detail from "../screens/Detail";
+import Edit from "../screens/Edit";
 import Login from "../screens/Login";
+import { Button } from "react-native";
 const BottomTab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -20,7 +22,7 @@ const Stack = createStackNavigator();
 function HomeStack(props) {
   return (
     <Stack.Navigator mode="card" headerMode="screen">
-      <Stack.Screen
+      <Stack.Screen 
         name="Home"
         component={Home}
         options={{
@@ -32,6 +34,12 @@ function HomeStack(props) {
       component={Detail}
       options={{
         title: "Detail",
+      }}/>
+       <Stack.Screen
+      name="Edit"
+      component={Edit}
+      options={{
+        title: "Edit",
       }}/>
     </Stack.Navigator>
   );
