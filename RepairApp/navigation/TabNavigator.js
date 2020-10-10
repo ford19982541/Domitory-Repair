@@ -1,91 +1,109 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
 import {
   BottomNavigation,
   BottomNavigationTab,
-  Layout,
-  Text,
+  Icon,
 } from "@ui-kitten/components";
-import Home from "../screens/Home";
+import RepairList from "../screens/RepairList";
 import Profile from "../screens/Profile";
-import Detail from "../screens/Detail";
-import Login from "../screens/Login";
+import Detail from "../screens/RepairDetail";
+import LoginScreen from "../screens/Login";
+// import AuthLoadingScreen from "../screens/Loading";
+import AsyncStorage from "@react-native-community/async-storage";
+const OptionIcon = (props) => <Icon {...props} name="options-2-outline" />;
+const ToolIcon = (props) => (
+  <Icon {...props} name="tools" pack="fontAwesome5" />
+);
+
 const BottomTab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-// function HomeNavigator  () {
-//   <Stack.Navigator headerMode='none'>
-//     <Stack.Screen name='Home' component={Home}/>
-//     <Stack.Screen name='Details' component={Detail}/>
-//   </Stack.Navigator>
-// }
-function HomeStack(props) {
-  return (
-    <Stack.Navigator mode="card" headerMode="none">
-      <Stack.Screen
-        name="Home"
-        component={Home}
-      />
-      <Stack.Screen
-        name="Detail"
-        component={Detail}
-        options={{
-          title: "Detail",
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-function ProfileStack(props) {
-  return (
-    <Stack.Navigator mode="card" headerMode="none">
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          title: "Profile",
-          // cardStyle: { backgroundColor: "#F8F9FE" }
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-export default function LoginStack(props) {
-  return (
-    <SafeAreaProvider>
-      <Stack.Navigator mode="card" headerMode="none">
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ title: "Login", headerTransparent: true }}
-        />
-        <Stack.Screen name="App" component={TabNavigator} />
-      </Stack.Navigator>
-    </SafeAreaProvider>
-  );
-}
-const BottomTabBar = ({ navigation, state }) => (
-  <React.Fragment>
-    <BottomNavigation
-      selectedIndex={state.index}
-      onSelect={(index) => navigation.navigate(state.routeNames[index])}
-    >
-      <BottomNavigationTab title="HomE" />
-      <BottomNavigationTab title="Profile" />
-    </BottomNavigation>
-  </React.Fragment>
+const HomeStack = createStackNavigator();
+const HomeStackScreen = () => (
+  <HomeStack.Navigator>
+    <HomeStack.Screen name="RepairList" component={RepairList} />
+    <HomeStack.Screen
+      name="Detail"
+      component={Detail}
+      options={{ title: "Detail" }}
+    />
+  </HomeStack.Navigator>
 );
 
-function TabNavigator() {
-  return (
-    <BottomTab.Navigator tabBar={(props) => <BottomTabBar {...props} />}>
-      <BottomTab.Screen name="Home" component={HomeStack} />
-      <BottomTab.Screen name="Profile" component={ProfileStack} />
-    </BottomTab.Navigator>
-  );
-}
+// const ProfileStack = createStackNavigator();
+// const ProfileStackScreen = () => (
+//   <ProfileStack.Navigator mode="card" headerMode="none">
+//     <ProfileStack.Screen
+//       name="Profile"
+//       component={Profile}
+//       options={{ title: "Profile" }}
+//     />
+//   </ProfileStack.Navigator>
+// );
 
-// const AppNavigator = () => <TabNavigator />;
+const BottomTabBar = ({ navigation, state }) => (
+  <BottomNavigation
+    selectedIndex={state.index}
+    onSelect={(index) => navigation.navigate(state.routeNames[index])}
+  >
+    <BottomNavigationTab title="HomE" icon={OptionIcon} />
+    <BottomNavigationTab title="Profile" icon={ToolIcon} />
+  </BottomNavigation>
+);
+
+const AppTab = createBottomTabNavigator();
+const AppTabScreen = () => (
+  <AppTab.Navigator tabBar={(props) => <BottomTabBar {...props} />}>
+    <AppTab.Screen name="Home" component={HomeStackScreen} />
+    <AppTab.Screen name="Profile" component={Profile} />
+  </AppTab.Navigator>
+);
+
+const AuthStack = createStackNavigator();
+const AuthStackScreen = () => (
+  <SafeAreaProvider>
+    <Stack.Navigator mode="card" headerMode="none">
+      <Stack.Screen name="Login" component={LoginScreen} />
+    </Stack.Navigator>
+  </SafeAreaProvider>
+);
+const RootStack = createStackNavigator();
+const RootStackScreen = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isloggedin, setLogged] = useState(null);
+
+  const detectLogin = async () => {
+    const token = await AsyncStorage.getItem("userToken");
+    if (token) {
+      setLogged(true);
+    } else {
+      setLogged(false);
+    }
+  };
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(!isLoading);
+      detectLogin();
+    }, 500);
+  }, []);
+
+  return (
+    <RootStack.Navigator
+      headerMode="none"
+      screenOptions={{ animationEnabled: false }}
+      mode="modal"
+    >
+      {  isloggedin ? (
+        <RootStack.Screen name="AppTabScreen" component={AppTabScreen} />
+      ) : (
+        <RootStack.Screen name="AuthStackScreen" component={AuthStackScreen} />
+      )}
+    </RootStack.Navigator>
+  );
+};
+export default () => {
+  return <RootStackScreen />;
+};
