@@ -8,7 +8,8 @@ import {
   Text,
   Card,
   Icon,
-  Avatar
+  Avatar,
+ 
 
 } from "@ui-kitten/components";
 

@@ -1,5 +1,8 @@
 import React from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, ScrollView, View, StyleSheet, Text, TextInput, Alert, Platform, Image } from "react-native";
+import ValidationComponent from 'react-native-form-validator';
+import RNPickerSelect from 'react-native-picker-select';
+import axios from 'axios'
 import {
   Divider,
   Icon,
@@ -8,6 +11,7 @@ import {
   TopNavigation,
   TopNavigationAction,
 } from "@ui-kitten/components";
+import AsyncStorage from "@react-native-community/async-storage";
 
 // const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
@@ -18,7 +22,9 @@ import {
 // const BackAction = () => (
 //   <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
 // );
-export default class Edit extends React.Component {
+export default class Edit extends ValidationComponent {
+
+
   render() {
     // const { navigation } = this.props;
     // const navigateBack = () => {
