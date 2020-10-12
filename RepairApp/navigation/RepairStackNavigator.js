@@ -2,6 +2,7 @@ import React from "react";
 import { createStackNavigator} from "@react-navigation/stack";
 import RepairList from "../screens/RepairList";
 import RepairDetail from "../screens/RepairDetail";
+import RepairCreate from "../screens/RepairCreate";
 
 const RepairStack = createStackNavigator();
 export function RepairStackNavigator() {
@@ -13,6 +14,7 @@ export function RepairStackNavigator() {
         component={RepairDetail}
         options={{ title: "Detail" }}
       />
+      <RepairStack.Screen name={"RepairCreate"} component={RepairCreate} options={{ title: "Create"}}/>
     </RepairStack.Navigator>
   );
 }
