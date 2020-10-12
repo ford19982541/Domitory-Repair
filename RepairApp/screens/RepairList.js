@@ -12,6 +12,7 @@ export default ({ navigation }) => (
   <SafeAreaView style={{ flex: 1 }}>
     <Layout style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Home</Text>
+      <Button onPress={() => navigation.navigate('RepairCreate')}>Add Repair</Button>
       <Button onPress={() => navigation.navigate('RepairDetail')}>OPEN DETAILS</Button>
     </Layout>
   </SafeAreaView>
