@@ -25,10 +25,6 @@ export function LoginScreen({ navigation }) {
       <Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'}/>
     </TouchableWithoutFeedback>
   );
-  // let formLogin ={
-  //   username: username,
-  //   password: password
-  // }
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout
@@ -52,14 +48,13 @@ export function LoginScreen({ navigation }) {
           onChangeText={setPassword}
           value={password}
         />
-        
         <Button
           onPress={async () => {
             const formData = new FormData();
             formData.append('username', username)
             formData.append('password', password)
-            // console.log(formData)
             try {
+              console.log('login')
               await login(formData);
             } catch (e) {
               setError(e.message);

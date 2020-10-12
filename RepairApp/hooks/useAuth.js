@@ -5,22 +5,6 @@ import { BASE_URL } from "../config";
 import { createAction } from "../utils/createAction";
 import { sleep } from "../utils/sleep";
 export function useAuth() {
-  const getDataLogin = () => {
-    axios
-      .get('http://127.0.0.1:8000/rest-auth/login/')
-      .then(function(response) {
-        // handle success
-        alert(JSON.stringify(response.data));
-      })
-      .catch(function(error) {
-        // handle error
-        alert(error.message);
-      })
-      .finally(function() {
-        // always executed
-        alert('Finally called');
-      });
-  };
   const [state, dispatch] = React.useReducer(
     (state, action) => {
       switch (action.type) {
@@ -52,7 +36,7 @@ export function useAuth() {
     () => ({
       login: async (formData) => {
         const {data} = await axios.post(`${BASE_URL}/rest-auth/login/`,formData);
-        console.log(data,'data')
+        console.log('api')
         const user = {
           username: data,
           token: data.key
