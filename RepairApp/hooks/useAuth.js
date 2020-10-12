@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
 import { BASE_URL } from "../config";
+import { UserContext } from "../contexts/UserContext";
 import { createAction } from "../utils/createAction";
 import { sleep } from "../utils/sleep";
 export function useAuth() {
@@ -35,11 +36,14 @@ export function useAuth() {
   const auth = React.useMemo(
     () => ({
       login: async (formData) => {
-        const {data} = await axios.post(`${BASE_URL}/rest-auth/login/`,formData);
-        console.log('api')
+        const { data } = await axios.post(
+          `${BASE_URL}/rest-auth/login/`,
+          formData
+        );
+        console.log("api", data);
         const user = {
-          username: data,
-          token: data.key
+          username: formData.username,
+          token: data.key,
         };
         await AsyncStorage.setItem("user", JSON.stringify(user));
         dispatch(createAction("SET_USER", user));
