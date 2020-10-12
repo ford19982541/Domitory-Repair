@@ -18,11 +18,15 @@ import {
 // const BackAction = () => (
 //   <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
 // );
-export default ({ navigation }) => (
-  <SafeAreaView style={{ flex: 1 }}>
-    <Divider />
-    <Layout style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text category="h1">DETAILS</Text>
-    </Layout>
-  </SafeAreaView>
-);
+export default function RepairDetail({ navigation }) {
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Divider />
+      <Layout
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
+        <Text category="h1">DETAILS</Text>
+      </Layout>
+    </SafeAreaView>
+  );
+}

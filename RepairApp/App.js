@@ -10,7 +10,8 @@ import { MainTabNavigator } from "./navigation/MainTabNavigator";
 import { useAuth } from "./hooks/useAuth";
 import { AuthContext } from "./contexts/AuthContext";
 import { UserContext } from "./contexts/UserContext";
-import {SplashScreen} from './screens/SplashScreen';
+import { SplashScreen } from "./screens/SplashScreen";
+
 const RootStack = createStackNavigator();
 
 export default function App() {
@@ -18,12 +19,7 @@ export default function App() {
 
   function renderScreens() {
     if (state.loading) {
-      return (
-        <RootStack.Screen
-          name={"Splash"}
-          component={SplashScreen}
-        />
-      );
+      return <RootStack.Screen name={"Splash"} component={SplashScreen} />;
     }
     return state.user ? (
       <RootStack.Screen name={"MainStack"}>
@@ -47,7 +43,8 @@ export default function App() {
             screenOptions={{
               headerShown: false,
               animationEnabled: false,
-            }}>
+            }}
+          >
             {renderScreens()}
           </RootStack.Navigator>
         </ApplicationProvider>
