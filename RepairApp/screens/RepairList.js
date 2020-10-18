@@ -1,112 +1,66 @@
-import React from "react";
-import { SafeAreaView, ScrollView, StyleSheet} from "react-native";
+import React, { useRef, useEffect} from "react";
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  Button,
+  Icon,
   Layout,
-  Text,
-  Card
+  List,
+  TopNavigation,
+  TopNavigationAction,
+  Divider,
 } from "@ui-kitten/components";
-
-export default ({ navigation }) => (
-  <SafeAreaView style={{ flex: 1 }}>
-    {/* <Layout style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Home</Text>
-      <Button onPress={() => navigation.navigate('RepairCreate')}>Add Repair</Button>
-      <Button onPress={() => navigation.navigate('RepairDetail')}>OPEN DETAILS</Button>
-    </Layout> */}
-    <ScrollView style={{ flex: 1 }}>
-        <Layout style={{ flex: 1, padding: 5, alignItems: "center" }}>
-          <Button style={styles.button1} status='primary' onPress={() => navigation.navigate('RepairCreate')}>แจ้งซ่อม</Button>
-
-          <Card style={styles.card} status='warning'>
-            <Text style={styles.text} category='h2' status='warning'>แจ้งซ่อม</Text>
-            <Text style={styles.text} category='h5'>แจ้งซ่อมไฟฟ้า</Text>
-            <Layout style={styles.text1} level='1'>
-              <Text style={styles.text} category='s2'>พัดลมไม่หมุน</Text>
-              <Text style={styles.text} category='s2'>  09/10/2563</Text>
-            </Layout>
-            <Layout style={styles.button} level='1'>
-              <Button style={styles.button} appearance='outline' status='warning' onPress={() => navigation.navigate('RepairDetail')}>DETAILS</Button>
-              <Button style={styles.button} appearance='outline' status='warning' onPress={() => navigation.navigate('RepairEdit')}>EDIT</Button>
-              <Button style={styles.button} appearance='outline' status='warning' >DELETE</Button>
-            </Layout>
-          </Card>
-          {/* <Card style={styles.card} status='primary'>
-            <Text style={styles.text} category='h2' status='primary'>กำลังดำเนินการ</Text>
-            <Text style={styles.text} category='h5'>แจ้งซ่อมประปา</Text>
-            <Layout style={styles.text1} level='1'>
-              <Text style={styles.text} category='s2'>น้ำไม่ไหล</Text>
-              <Text style={styles.text} category='s2'></Text>
-            </Layout>
-            <Layout style={styles.button} level='1'>
-              <Button style={styles.button} appearance='outline' onPress={() => navigation.navigate('RepairDetail')}>DETAILS</Button>
-              <Button style={styles.button} appearance='outline' onPress={navigateEdit}>EDIT</Button>
-              <Button style={styles.button} appearance='outline' >DELETE</Button>
-            </Layout>
-          </Card>
-          <Card style={styles.card} status='success'>
-            <Text style={styles.text} category='h2' status='success'>เสร็จสิ้น</Text>
-            <Text style={styles.text} category='h5'>แจ้งซ่อมเฟอร์นิเจอร์</Text>
-            <Layout style={styles.text1} level='1'>
-              <Text style={styles.text} category='s2'>โต๊ะพัง</Text>
-              <Text style={styles.text} category='s2'> </Text>
-            </Layout>
-            <Layout style={styles.button} level='1'>
-              <Button style={styles.button} appearance='outline' status='success' onPress={() => navigation.navigate('RepairDetail')}>DETAILS</Button>
-              <Button style={styles.button} appearance='outline' status='success' onPress={navigateEdit}>EDIT</Button>
-              <Button style={styles.button} appearance='outline' status='success' >DELETE</Button>
-            </Layout>
-          </Card>
-          <Card style={styles.card} status='danger'>
-            <Text style={styles.text} category='h2' status='danger'>ยกเลิก</Text>
-            <Text style={styles.text} category='h5'>แจ้งซ่อมโครงการ</Text>
-            <Layout style={styles.text1} level='1'>
-              <Text style={styles.text} category='s2'></Text>
-              <Text style={styles.text} category='s2'></Text>
-            </Layout>
-            <Layout style={styles.button} level='1'>
-              <Button style={styles.button} appearance='outline' status='danger' onPress={() => navigation.navigate('RepairDetail')}>DETAILS</Button>
-              <Button style={styles.button} appearance='outline' status='danger' onPress={navigateEdit}>EDIT</Button>
-              <Button style={styles.button} appearance='outline' status='danger' >DELETE</Button>
-            </Layout>
-          </Card> */}
-        </Layout>
-
-
-
-      </ScrollView>
-
-  </SafeAreaView>
-  
-);
+import { Repair } from "../components/Repair";
+import { useGet } from "../hooks/useGet";
+export default function RepairList({ navigation }) {
+  const pulseIconRef = useRef();
+  useEffect(() => {
+    pulseIconRef.current.startAnimation();
+  }, []);
+  const AddIcon = (props) => (
+    <Icon
+      {...props}
+      ref={pulseIconRef}
+      animationConfig={{ cycles: Infinity }}
+      animation="pulse"
+      name="plus-outline"
+    />
+  );
+  const renderAddAction = () => <TopNavigationAction icon={AddIcon} onPress={() => {
+    navigation.navigate('RepairCreate')
+  }}/>;
+  const repairs = useGet("/api/Repairs");
+  function renderItem({ item: repair }) {
+    return <Repair repair={repair} onPress={() => {
+      navigation.navigate('RepairDetail',repair.id)
+    }} />;
+  }
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <TopNavigation
+        title="Eva Application"
+        alignment="center"
+        accessoryRight={renderAddAction}
+      />
+      <Divider />
+      <Layout style={styles.container}>
+        <List
+          data={repairs}
+          renderItem={renderItem}
+          keyExtractor={(repair) => `${repair.id}`}
+        />
+      </Layout>
+    </SafeAreaView>
+  );
+}
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    padding: 500,
+    flex: 1,
+    justifyContent: "center",
+    // alignItems: 'center',
+    // paddingVertical: 8,
+    marginHorizontal: 8,
   },
   card: {
-    margin: 8,
-
+    marginVertical: 10,
   },
-  button: {
-    margin: 2,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-
-  },
-  text: {
-    alignItems: 'center',
-  },
-  text1: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-
-  }
-
-
-
-
 });

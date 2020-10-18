@@ -8,16 +8,6 @@ import {
   TopNavigation,
   TopNavigationAction,
 } from "@ui-kitten/components";
-
-// const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
-
-// const navigateBack = () => {
-//   navigation.goBack();
-// };
-
-// const BackAction = () => (
-//   <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
-// );
 export default function RepairDetail({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
