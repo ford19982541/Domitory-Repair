@@ -8,7 +8,12 @@ import {
   TopNavigation,
   TopNavigationAction,
 } from "@ui-kitten/components";
-export default function RepairDetail({ navigation }) {
+import { useGet } from "../hooks/useGet";
+export default function RepairDetail({ navigation, route }) {
+  const repairId = route.params.id
+  console.log("ID",repairId)
+  const data = useGet(`/api/Repairs/${repairId}/`)
+  console.log("detail",data)
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Divider />

@@ -31,7 +31,7 @@ export default function RepairList({ navigation }) {
   const repairs = useGet("/api/Repairs");
   function renderItem({ item: repair }) {
     return <Repair repair={repair} onPress={() => {
-      navigation.navigate('RepairDetail',repair.id)
+      navigation.navigate('RepairDetail',{id: repair.id})
     }} />;
   }
   return (

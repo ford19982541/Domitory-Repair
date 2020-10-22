@@ -10,7 +10,7 @@ export function useGet(endpoint, initialValue = []) {
     axios
       .get(`${BASE_URL}${endpoint}`, {
         headers: {
-          Authorization: `bearer ${token}`,
+          Authorization: `Token ${token}`,
         },
       })
       .then(({data}) => {
