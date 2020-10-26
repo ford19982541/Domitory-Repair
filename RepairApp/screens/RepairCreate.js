@@ -1,113 +1,162 @@
-import React from "react";
-import { SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Button,
-  Alert,
-
-  Platform,  } from "react-native";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, StyleSheet, Image, Alert } from "react-native";
 import {
-  Divider,
-  Icon,
+  Button,
+  Input,
   Layout,
-  Select, 
+  Select,
   SelectItem,
+  Card,
+  Text,
   IndexPath,
-  TopNavigation,
-  TopNavigationAction,
 } from "@ui-kitten/components";
-import ValidationComponent from 'react-native-form-validator'
-import axios from 'axios'
-
-
-// const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
-
-// const navigateBack = () => {
-//   navigation.goBack();
-// };
-
-// const BackAction = () => (
-//   <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
-// );
-
-
-export default class Repair extends ValidationComponent {
-  
-  state = {
-    loading: false,
-    repair_type: '',
-    desc: '',
-    created_date: '',
-    image: '',
+// import { useGet } from "../hooks/useGet";
+import { SelectRepairType } from "../components/SelectRepairType";
+import { useGet } from "../hooks/useGet";
+// import PhotoUpload from "react-native-photo-upload";
+import * as ImagePicker from "expo-image-picker";
+import Modal, { ModalContent } from "react-native-modals";
+export default function RepairCreate({ navigation }) {
+  const [loading, setLoading] = useState(true);
+  // RepairType
+  // const repairTypeData = useGet(`/api/RepairType/`);
+  // const [repairTypeSelectedIndex, setRepairTypeSelectedIndex] = useState();
+  const [repairType, setRepairType] = useState(1);
+  function repairTypeCallBack(data) {
+    setRepairType(data);
   }
+  // const repairTypeOption = (item) => (
+  //   <SelectItem title={item.nameRe} key={item.id} />
+  // );
 
-  _onSubmit = () => {
-    const isValid = this.validate({
-      repair_type: { required: true },
-      desc: { required: true },
-      created_date: { required: true },
-      image: { required: true },
-    });
-    if (isValid) {
-      this.setState({ loading: true })
-      const formData = new FormData();
-      const uri = this.state.avatar
-      formData.append('download', {
-        uri: Platform.OS === 'android' ? uri : uri.replace('file://', ''),
-        type: 'image/png',
-        name: 'download.png',
-      })
-      formData.append('repair_type', this.state.repair_type)
-      formData.append('desc', this.state.desc)
-      formData.append('created_date', this.state.created_date)
-      formData.append('image', this.state.image)
-      const config = {
-        method: 'POST',
-        body: formData,
-      }
-      axios.post('http://127.0.0.1:8000/api/Repairs/', formData, config)
-        .then((res) => {
-          Alert.alert(
-            'Create success',
-            'Click OK go to resume page',
-            [{
-              text: 'OK', onPress: () => {
-                this.props.navigation.push('RepairDetail', { id: res.data.id })
-              }
-            }]
-          )
-        }).catch((error) => {
-          console.log('error :', error)
-        }).finally(() => {
-          this.setState({ loading: true })
-        })
-    }
-    
-  }
+  // // Dormitory
+  // const DormitoryData = useGet(`/api/Dormitorys/`);
+  // const [DormitorySelectedIndex, setDormitorySelectedIndex] = useState();
+  // const [DormitorySelectData, setDormitorySelectData] = useState();
+  // const DormitoryOption = (item) => (
+  //   <SelectItem title={item.nameDo} key={item.id} />
+  // );
+  // // Room
+  // const RoomData = useGet(`/api/Rooms/`);
+  // const [RoomSelectedIndex, setRoomSelectedIndex] = useState();
+  // const [RoomSelectData, setRoomSelectData] = useState();
+  // const RoomOption = (item) => (
+  //   <SelectItem
+  //     title={`${item.dormitory.nameDo}${item.nameRo}`}
+  //     key={item.id}
+  //   />
+  // );
+  // //DESC
+  // const useInputState = (initialValue = "") => {
+  //   const [descValue, setDescValue] = React.useState(initialValue);
+  //   return { descValue, onChangeText: setDescValue };
+  // };
+  // const multilineInputState = useInputState();
 
-  
+  // //Image
 
-  render() {
-    
-    return (
+  // const [image, setImage] = useState(null);
+  // const [visible, setVisible] = React.useState(false);
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.errorMessage}>
-          {this.getErrorMessages()}
-        </Text>
+  //   console.log(result);
 
-        <View>
-          <Text>ประเภท</Text>
+  //   if (!result.cancelled) {
+  //     setImage(result.uri);
+  //   }
+  // };
+  // const pickCamera = async () => {
+  //   let result = await ImagePicker.launchCameraAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-          <Select title="ประเภท">
-            <SelectItem title='Option 1'/>
-            <SelectItem title='Option 2'/>
-            <SelectItem title='Option 3'/>
-          </Select>
-        
-        </View>
+  //   console.log(result);
+
+  //   if (!result.cancelled) {
+  //     setImage(result.uri);
+  //   }
+  // };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Layout level="1">
+        <SelectRepairType value={repairType} onChange={repairTypeCallBack} />
+        {/* <Select
+          label="ประเภท"
+          placeholder="Default"
+          value={
+            repairTypeSelectedIndex == undefined
+              ? "please"
+              : repairTypeData[repairTypeSelectedIndex.row].nameRe
+          }
+          selectedIndex={repairTypeSelectedIndex}
+          onSelect={(index) => setRepairTypeSelectedIndex(index)}
+        >
+          {repairTypeData.map(repairTypeOption)}
+        </Select> */}
+
+        {/* <Select
+          label="หอพัก"
+          placeholder="Default"
+          value={
+            DormitorySelectedIndex == undefined
+              ? "please"
+              : DormitoryData[DormitorySelectedIndex.row].nameDo
+          }
+          selectedIndex={DormitorySelectedIndex}
+          onSelect={(index) => setDormitorySelectedIndex(index)}
+        >
+          {DormitoryData.map(DormitoryOption)}
+        </Select>
+
+        <Select
+          label="ห้อง"
+          placeholder="Default"
+          value={
+            RoomSelectedIndex == undefined
+              ? "please"
+              : RoomData[RoomSelectedIndex.row].dormitory.nameDo +
+                RoomData[RoomSelectedIndex.row].nameRo
+          }
+          selectedIndex={RoomSelectedIndex}
+          onSelect={(index) => setRoomSelectedIndex(index)}
+        >
+          {RoomData.map(RoomOption)}
+        </Select>
+
+        <Input
+          multiline={true}
+          textStyle={{ minHeight: 70 }}
+          label="ปัญหา/อาการ"
+          placeholder="ปัญหา/อาการ"
+          {...multilineInputState}
+        />
+
+        <Button onPress={setVisible(true)}>Pick an image from camera roll</Button>
+        <Modal
+          visible={visible}
+          onTouchOutside={() => {
+            setVisible(false)
+          }}
+        >
+          <ModalContent>
+            <Text>Test</Text>
+          </ModalContent>
+        </Modal>
+        {image && (
+          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+        )} */}
+      </Layout>
+      {/*
 
         <View style={{ marginTop: 20 }}>
           <Text>ปัญหา/อาการ</Text>
@@ -131,56 +180,21 @@ export default class Repair extends ValidationComponent {
         <View style={{ marginTop: 20 }}>
           <Text>รูปภาพ(ถ้ามี)</Text>
 
-        </View>
+      </View> */}
 
-
-        <View style={{ marginTop: 20, marginBottom: 80 }}>
-          <Button
-            disabled={this.state.loading}
-            onPress={this._onSubmit}
-            title={this.state.loading ? 'Loading...' : 'Create Repair'}
-          />
-        </View>
-      </SafeAreaView>
-    )
-  }
+      <Button
+        onPress={() => console.log(repairType,'re')}
+      >Crate</Button>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 30, backgroundColor: 'white', minHeight: '100%' },
-  textInput: { height: 40, borderColor: 'gray', borderWidth: 1 },
-  textAreaInput: { height: 100, borderColor: 'gray', borderWidth: 1 },
-  errorMessage: { color: 'red', marginBottom: 20 }
-})
-
-
-
-
-
-
-// export default class Repair extends React.Component {
-  
-//   render() {
-//     // const { navigation } = this.props;
-//     // const navigateBack = () => {
-//     //   navigation.goBack();
-//     // };
-  
-
-//     return (
-//       <SafeAreaView style={{ flex: 1 }}>
-//         <Divider />
-//         <Layout style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-//           <Text category="h1">Add Repair</Text>
-
-//               <Text>ปัญหา/อาการ</Text>
-//               <Text>เวลาที่อยู่ห้อง</Text>
-//               <Text>รูปภาพ(ถ้ามี)</Text>
-
-
-//         </Layout>
-
-//       </SafeAreaView>
-//     );
-//   }
-// }
+  container: { padding: 30, backgroundColor: "white", minHeight: "100%" },
+  textInput: { height: 40, borderColor: "gray", borderWidth: 1 },
+  textAreaInput: { height: 100, borderColor: "gray", borderWidth: 1 },
+  errorMessage: { color: "red", marginBottom: 20 },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+});
