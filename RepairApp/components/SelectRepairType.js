@@ -21,7 +21,9 @@ const data = [
   { id: 4, nameRe: "โครงสร้าง" },
 ];
 export function SelectRepairType(props) {
-  const [selectedIndex, setSelectedIndex] = useState(new IndexPath(props.value));
+  const [selectedIndex, setSelectedIndex] = useState(
+    new IndexPath(props.value)
+  );
   // const [selectData, setSelectData] = useState(null);
   const displayValue = data[selectedIndex.row].nameRe;
   const renderOption = (item) => (
@@ -63,6 +65,7 @@ export function SelectRepairType(props) {
   return (
     <Layout level="1">
       <Select
+        style={{ marginVertical: 2 }}
         label="ประเภท"
         placeholder="Default"
         value={displayValue}

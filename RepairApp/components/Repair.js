@@ -5,7 +5,6 @@ import { BASE_URL } from "../config";
 
 export function Repair({ repair, onPress }) {
   const Status = ({ props }) =>
-
   repair.status == 1
       ? "info"
       : repair.status == 2

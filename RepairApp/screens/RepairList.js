@@ -14,7 +14,7 @@ import { useGet } from "../hooks/useGet";
 export default function RepairList({ navigation }) {
   const pulseIconRef = useRef();
   useEffect(() => {
-    pulseIconRef.current.startAnimation();
+    // pulseIconRef.current.startAnimation();
   }, []);
   const AddIcon = (props) => (
     <Icon

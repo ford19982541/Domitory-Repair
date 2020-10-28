@@ -7,7 +7,7 @@ import { useGet } from "./useGet";
 export function useRepair() {
   const repair = React.useMemo(
     () => ({
-      create: async (formData) => {
+      createRepair: async (formData) => {
         await sleep(2000);
         await axios.post(`${BASE_URL}/api/repairs/`, {
           formData,
@@ -30,4 +30,5 @@ export function useRepair() {
     }),
     []
   );
+  return { repair };
 }

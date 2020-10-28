@@ -11,8 +11,8 @@ const AlertIcon = (props) => (
 export function LoginScreen({ navigation }) {
   
   const { login } = React.useContext(AuthContext);
-  const [username, setUsername] = React.useState("admin");
-  const [password, setPassword] = React.useState("password");
+  const [username, setUsername] = React.useState("fordzii");
+  const [password, setPassword] = React.useState("NXX6fe9hem");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState("");
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
@@ -53,8 +53,9 @@ export function LoginScreen({ navigation }) {
             const formData = new FormData();
             formData.append('username', username)
             formData.append('password', password)
+
             try {
-              console.log('login')
+              console.log(formData,'login')
               await login(formData);
             } catch (e) {
               setError(e.message);

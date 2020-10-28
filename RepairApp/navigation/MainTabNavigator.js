@@ -7,7 +7,7 @@ import {
   BottomNavigationTab,
   Icon,
 } from "@ui-kitten/components";
-
+import { useProfile } from "../hooks/useProfile";
 const OptionIcon = (props) => <Icon {...props} name="options-2-outline" />;
 const ToolIcon = (props) => (
   <Icon {...props} name="tools" pack="fontAwesome5" />
@@ -23,13 +23,20 @@ const BottomTabBar = ({ navigation, state }) => (
   </BottomNavigation>
 );
 export function MainTabNavigator() {
+  const user = useProfile();
+
   return (
     <MainTab.Navigator tabBar={(props) => <BottomTabBar {...props} />}>
       <MainTab.Screen
         name={"RepairStackNavigator"}
         component={RepairStackNavigator}
       />
-      <MainTab.Screen name="Profile" component={Profile} />
+      <MainTab.Screen 
+      name="Profile" 
+      // component={Profile} 
+    >
+      {(props) => <Profile  {...props} user={user.id} />}
+    </MainTab.Screen>
     </MainTab.Navigator>
   );
 }

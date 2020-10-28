@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { SafeAreaView, StyleSheet, Image, Alert } from "react-native";
 import {
   Button,
@@ -10,86 +10,103 @@ import {
   Text,
   IndexPath,
 } from "@ui-kitten/components";
-// import { useGet } from "../hooks/useGet";
+import { BASE_URL } from "../config";
+import { UserContext } from "../contexts/UserContext";
 import { SelectRepairType } from "../components/SelectRepairType";
-import { useGet } from "../hooks/useGet";
+import { AutocompleteRoom } from "../components/AutoCompleteRoom";
+import { InputDESC } from "../components/Input";
+import { SelectImage } from "../components/SelectImage";
+import { RepairContext } from "../contexts/RepairContext";
+import { Loading } from "../components/loading";
+import axios from "axios";
+import moment from "moment";
 // import PhotoUpload from "react-native-photo-upload";
 import * as ImagePicker from "expo-image-picker";
 import Modal, { ModalContent } from "react-native-modals";
+import { floor } from "react-native-reanimated";
+import { useProfile } from "../hooks/useProfile";
 export default function RepairCreate({ navigation }) {
-  const [loading, setLoading] = useState(true);
-  // RepairType
-  // const repairTypeData = useGet(`/api/RepairType/`);
-  // const [repairTypeSelectedIndex, setRepairTypeSelectedIndex] = useState();
-  const [repairType, setRepairType] = useState(1);
+  // const [user, setUser] = useState(useProfile);
+  const user = useProfile();
+  const [loading, setLoading] = useState(false);
+  const [repairType, setRepairType] = useState(0);
   function repairTypeCallBack(data) {
     setRepairType(data);
   }
-  // const repairTypeOption = (item) => (
-  //   <SelectItem title={item.nameRe} key={item.id} />
-  // );
-
   // // Dormitory
-  // const DormitoryData = useGet(`/api/Dormitorys/`);
-  // const [DormitorySelectedIndex, setDormitorySelectedIndex] = useState();
-  // const [DormitorySelectData, setDormitorySelectData] = useState();
-  // const DormitoryOption = (item) => (
-  //   <SelectItem title={item.nameDo} key={item.id} />
-  // );
-  // // Room
-  // const RoomData = useGet(`/api/Rooms/`);
-  // const [RoomSelectedIndex, setRoomSelectedIndex] = useState();
-  // const [RoomSelectData, setRoomSelectData] = useState();
-  // const RoomOption = (item) => (
-  //   <SelectItem
-  //     title={`${item.dormitory.nameDo}${item.nameRo}`}
-  //     key={item.id}
-  //   />
-  // );
-  // //DESC
-  // const useInputState = (initialValue = "") => {
-  //   const [descValue, setDescValue] = React.useState(initialValue);
-  //   return { descValue, onChangeText: setDescValue };
-  // };
-  // const multilineInputState = useInputState();
-
-  // //Image
-
-  // const [image, setImage] = useState(null);
-  // const [visible, setVisible] = React.useState(false);
-  // const pickImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   console.log(result);
-
-  //   if (!result.cancelled) {
-  //     setImage(result.uri);
-  //   }
-  // };
-  // const pickCamera = async () => {
-  //   let result = await ImagePicker.launchCameraAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   console.log(result);
-
-  //   if (!result.cancelled) {
-  //     setImage(result.uri);
-  //   }
-  // };
-
+  const [roomText, setRoomText] = useState("");
+  const [room, setRoom] = useState();
+  function roomCallBack(data) {
+    setRoomText(data.nameRo);
+    setRoom(data.id);
+  }
+  const [desc, setDESC] = useState("");
+  function descCallBack(data) {
+    setDESC(data);
+  }
+  const [image, setImage] = useState();
+  function imageCallBack(data) {
+    setImage(data);
+  }
+  const { token } = React.useContext(UserContext);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${BASE_URL}/rest-auth/user-profile/`, {
+  //       headers: {
+  //         Authorization: `Token ${token}`,
+  //       },
+  //     })
+  //     .then(({data}) => {
+  //       setUser(data);
+  //     })
+  //     .catch((e)=>{
+  //         console.log(e.response,'e')
+  //     });
+  // }, [token]);
+  async function create() {
+    setLoading(true);
+    const formData = new FormData();
+    // formData.append("",)
+    const toDay = moment(new Date()).format("YYYY-MM-DD");
+    console.log(user,repairType,room,desc,image.replace('file://', ''));
+    await axios
+      .post(`${BASE_URL}/api/Repairs/`, {
+        created_date: toDay,
+        request_date: toDay,
+        user_profile: user.id,
+        status: 1,
+        repair_type: repairType,
+        room: room,
+        contact: "0123456789",
+        desc: desc,
+        image:  {
+          uri: Platform.OS === 'android' ? image : image.replace('file:/', ''),
+          type: 'image/jpg',
+          name: 'image.jpg'
+      },
+      })
+      .then((res) => {
+        console.log(res, "res");
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error, "error");
+      });
+  }
   return (
     <SafeAreaView style={styles.container}>
       <Layout level="1">
         <SelectRepairType value={repairType} onChange={repairTypeCallBack} />
+        <AutocompleteRoom value={roomText} onChange={roomCallBack} />
+        <InputDESC value={desc} onChange={descCallBack} />
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{ width: 300, height: 200, alignItems: "center" }}
+          />
+        )}
+        <SelectImage value={image} onChange={imageCallBack} />
         {/* <Select
           label="ประเภท"
           placeholder="Default"
@@ -167,24 +184,12 @@ export default function RepairCreate({ navigation }) {
           />
         </View>
         <View style={{ marginTop: 20 }}>
-          <Text>เวลาที่อยู่ห้อง</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => this.setState({ created_date: text })}
-            value={this.state.created_date}
-          />
-        </View>
-
-
-
-        <View style={{ marginTop: 20 }}>
           <Text>รูปภาพ(ถ้ามี)</Text>
 
       </View> */}
 
-      <Button
-        onPress={() => console.log(repairType,'re')}
-      >Crate</Button>
+      <Button onPress={() => create()}>Crate</Button>
+      <Loading loading={loading} />
     </SafeAreaView>
   );
 }
