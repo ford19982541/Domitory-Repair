@@ -68,17 +68,22 @@ function Profile({ navigation, props }) {
   }, []);
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      
       <Layout style={{ flex: 1, alignContent: "center", alignItems: "center" }}>
         <Loading loading={loading} />
         <ShowProfile id={user.id} />
-        <Button
+        
+        
+      </Layout>
+
+      <Button
           onPress={() => {
             logout();
           }}
         >
-          Sign Out
+          SignOut
         </Button>
-      </Layout>
+
     </SafeAreaView>
   );
 }

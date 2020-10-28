@@ -11,8 +11,8 @@ const AlertIcon = (props) => (
 export function LoginScreen({ navigation }) {
   
   const { login } = React.useContext(AuthContext);
-  const [username, setUsername] = React.useState("fordzii");
-  const [password, setPassword] = React.useState("NXX6fe9hem");
+  const [username, setUsername] = React.useState("fordzii1");
+  const [password, setPassword] = React.useState("password_user");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState("");
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
