@@ -52,7 +52,15 @@ export default function RepairDetail({ navigation, route }) {
           <Text        
           textStyle={{ minHeight: 70 }}
           label="สถานะ"                
-        >สถานะ: {data.status}
+        >สถานะ: {data.status == 1
+          ? "แจ้งซ่อม"
+          : data.status == 2
+          ? "รอดำเนินการ"
+          : data.status == 3
+          ? "ดำเนินการ"
+          : data.status == 4
+          ? "เสร็จสิ้น"
+          : "ยกเลิก"}
         </Text>
           
           <Text        
@@ -88,7 +96,13 @@ export default function RepairDetail({ navigation, route }) {
           <Text        
           textStyle={{ minHeight: 70 }}
           label="ประเภท"                
-        >ประเภท: {data.repair_type}
+        >ประเภท: {data.repair_type == 1
+                 ? "ไฟฟ้า"
+                 :data.repair_type == 2
+                 ? "ประปา"
+                :data.repair_type == 3
+                ? "เฟอร์นิเจอร์"
+                :"โครงสร้าง"}
         </Text>
           
           <Text        
@@ -97,6 +111,7 @@ export default function RepairDetail({ navigation, route }) {
         >หมายเลขห้อง: {data.room}
         </Text>
          
+
 
        </Card> 
       </Layout>

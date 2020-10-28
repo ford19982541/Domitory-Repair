@@ -20,8 +20,10 @@ export function Repair({ repair, onPress }) {
         status={repair.status == 1
             ? "info"
             : repair.status == 2
-            ? "warning"
+            ? "basic"
             : repair.status == 3
+            ? "warning"
+            : repair.status == 4
             ? "success"
             : "danger"}
       >
@@ -30,8 +32,10 @@ export function Repair({ repair, onPress }) {
             {repair.status == 1
               ? "แจ้งซ่อม"
               : repair.status == 2
-              ? "ดำเนินการ"
+              ? "รอดำเนินการ"
               : repair.status == 3
+              ? "ดำเนินการ"
+              : repair.status == 4
               ? "เสร็จสิ้น"
               : "ยกเลิก"}
           </Text>
